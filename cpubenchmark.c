@@ -44,7 +44,7 @@ void perform_FLOPS(int no_threads)
 	gettimeofday(&endTime, NULL);//getting current time
 	total_time =(double) (endTime.tv_sec - startTime.tv_sec)+(double) (endTime.tv_usec - startTime.tv_usec) / 1000000 ;//total time 
 	no_flops = ((double)no_operations / (total_time )) / 1e9;//number of flops in giga flops
-	printf("%i\t\t\t%ld\t\t%s\t\t\t%f\t\t%f\n\n", no_threads, no_operations,"Double Operations", no_flops, total_time);
+	printf("%i\t\t\t%Lf\t\t%s\t\t\t%f\t\t%f\n\n", no_threads, no_operations,"Double Operations", no_flops, total_time);
 	free(threads);
 }
 
