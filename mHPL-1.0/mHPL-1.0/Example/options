@@ -1,0 +1,23 @@
+AWK = awk
+FC  = mpif90
+CP  = cp
+RM  = rm
+
+HPL_LIB       = -L$(HOME)/mHPL-1.0/lib/ORION -lmhpl
+EXAMPLE_BIN   = $(HOME)/mHPL-1.0/Example/bin
+
+SCALAPACK_LIB = $(HOME)/jhpl/scalapack-1.8.0/libscalapack.a
+BHOME         = $(HOME)/jhpl/BLACS/LIB
+BLACS_LIB     = $(BHOME)/blacsF77init_MPI-LINUX-1.a \
+                $(BHOME)/blacsCinit_MPI-LINUX-1.a \
+                $(BHOME)/blacs_MPI-LINUX-1.a
+LAPACK_LIB    = $(HOME)/jhpl/lapack-3.2/lapack_LINUX.a 
+BLAS_LIB      = $(HOME)/jhpl/BLAS/blas_Linux.a
+#BLASGOTO_LIB  = $(HOME)/jhpl/scalapack-1.8.0/libgoto.so
+#FFLAGS        = -g -pg -DUSE_PROF=1 -Wall -ftrace=full -malign-double -msse2
+FFLAGS        = -DUSE_PROF=1
+         
+LIBS=  \
+	$(HPL_LIB) \
+        $(BLACS_LIB) $(SCALAPACK_LIB) $(BLACS_LIB) \
+	$(LAPACK_LIB) $(BLASGOTO_LIB) $(BLAS_LIB)

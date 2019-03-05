@@ -1,0 +1,6 @@
+F77		= mpif77
+MAKE		= make
+CP		= cp -f
+RM		= rm
+CD		= cd
+MHPL_LIB	= -L$(HOME)/mHPL-1.0/lib/ORION -lmhpl

@@ -1,0 +1,8 @@
+ARCH    = ORION
+HPLHOME  = $(HOME)/mHPL-1.0
+MPICC = mpicc
+CC = $(MPICC)
+MPILOADER = mpif77
+CCFLAGS = -DUSE_PROF=1
+DEBFLAGS =   
+BLASLIB = /usr/lib/x86_64-linux-gnu/libblas.so

@@ -6,7 +6,7 @@
 #include <sys/time.h>
 
 
-const int no_loops = 1e6;
+
 void perform_FLOPS(int);
 void * fpoperations(void *);
 
@@ -14,6 +14,7 @@ int main(int argc, char** argv)
 {
 	int no_threads[4] = {1,2,4,8},i;//no of threads array
 	size_t threads_size=sizeof(no_threads)/sizeof(int);//size of thread
+	printf(threads_size);
 	printf("no of threads\t\t\tNo of Operations\t\tOperation\t\t\tIOPS/FLOPS\t\tTime(Seconds)\n\n");
 	for(i=0;i<threads_size;i++)
 	{
@@ -25,7 +26,7 @@ int main(int argc, char** argv)
 
 void perform_FLOPS(int no_threads)
 {
-	struct timeval startTime, endTime;
+	struct startTime, endTime;
 	double total_time,no_flops;
 
 	long double no_operations= 1000000000000;	// no of iterations
@@ -65,7 +66,7 @@ void * fpoperations(void * arg)
 	int z;
 	float result;
 	/* strong scaling in executing instructions*/
-	for (z = 0; z < (10000000000); z++) 
+	for (z = 0; z < (1000000); z++) 
 	{
 			result=a+b+c+d+e+f+g+h+i+j+k;	
 	}

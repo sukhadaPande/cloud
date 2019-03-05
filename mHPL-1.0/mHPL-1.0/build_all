@@ -1,0 +1,5 @@
+make -f Makefile-shpl
+make -f Makefile-xhpl
+make -f Makefile-chpl
+make -f Makefile-zhpl
+make -f Makefile-mhpl

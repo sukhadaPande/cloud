@@ -1,0 +1,261 @@
+##################################################################
+include options
+##################################################################
+
+all   : build
+
+build : src testing arbuild
+	echo " >>>  Building executable shpl >>>>>> "
+	( cd $(HPLHOME)/testing/ptest ; \
+             $(MPICC) -c $(DEBFLAGS) $(CCFLAGS) -I$(HPLHOME)/include HPL_psdriver.c )
+        
+	( cd $(HPLHOME)/testing/ptest ; \
+             $(MPILOADER) -o $(HPLHOME)/bin/$(ARCH)/shpl $(HPLHOME)/O/HPL_psdriver.o\
+               -I$(HPLHOME)/include $(ATLASHOME) $(BLASLIB)  \
+               -L$(HPLHOME)/lib/$(ARCH) -lshpl  $(BLASLIB) )
+	echo " >>>  DONE with all build steps >>>>>> "
+	echo " >>>  Please go to /bin to run shpl >>>>>> "
+
+arbuild : src
+	( cd $(HPLHOME); \
+             mkdir lib; \
+	mkdir $(HPLHOME)/bin/$(ARCH) ; \
+             cd $(HPLHOME)/lib; \
+             mkdir $(ARCH);\
+             cd $(HPLHOME)/O ; \
+             echo "   >>>  creating library in " ; \
+             ar r libshpl.a *.o ; \
+	ar d libshpl.a HPL_psdriver.o ; \
+             ranlib libshpl.a ; \
+             mv libshpl.a $(HPLHOME)/lib/$(ARCH) ; \
+	cp $(HPLHOME)/testing/ptest/HPL.dat $(HPLHOME)/bin/$(ARCH) )
+	echo " >>>  move library to"  $(HPLHOME)/lib/$(ARCH)
+
+
+############################################
+
+src : cleanobj auxil blas comm grid panel pauxil pfact pgesv
+	echo " >>>  Finish compile in src directory " 
+
+testing : matgen pmatgen ptest timer ptimer
+	echo " >>>  Finish compile in testing " 
+
+cleanobj : 
+	echo " >>>  Start compile all " 
+	touch $(HPLHOME)/O/test.o
+	rm -f $(HPLHOME)/O/*.o
+
+auxil :
+	( cd $(HPLHOME)/src/auxil/ ; \
+           echo " >>>  Compiling in src/auxil directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_abort.c \
+HPL_fprintf.c \
+HPL_slacpy.c \
+HPL_slamch.c \
+HPL_slange.c \
+HPL_slaprnt.c \
+HPL_slatcpy.c \
+HPL_warn.c ; \
+           mv *.o ../../O )
+
+blas :
+	( cd $(HPLHOME)/src/blas/ ; \
+           echo " >>>  Compiling in src/blas directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_isamax.c \
+HPL_saxpy.c \
+HPL_scopy.c \
+HPL_sgemm.c \
+HPL_sgemv.c \
+HPL_sger.c \
+HPL_sscal.c \
+HPL_sswap.c \
+HPL_strsm.c \
+HPL_strsv.c ;\
+           mv *.o ../../O )
+
+comm :
+	( cd $(HPLHOME)/src/comm/ ; \
+           echo " >>>  Compiling in src/comm directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_s1ring.c \
+HPL_s1rinM.c \
+HPL_s2ring.c \
+HPL_s2rinM.c \
+HPL_sbcast.c \
+HPL_sbinit.c \
+HPL_sblong.c \
+HPL_sblonM.c \
+HPL_sbwait.c \
+HPL_scopyL.c \
+HPL_spackL.c \
+HPL_srecv.c \
+HPL_ssdrv.c \
+HPL_ssend.c ;\
+           mv *.o ../../O )
+
+grid :
+	( cd $(HPLHOME)/src/grid/ ; \
+           echo " >>>  Compiling in src/grid directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_barrier.c \
+HPL_grid_exit.c \
+HPL_grid_info.c \
+HPL_grid_init.c \
+HPL_pnum.c \
+HPL_sall_reduce.c \
+HPL_sbroadcast.c \
+HPL_smax.c \
+HPL_smin.c \
+HPL_sreduce.c \
+HPL_ssum.c \
+HPL_broadcast.c \
+HPL_max.c \
+HPL_min.c \
+HPL_reduce.c \
+HPL_all_reduce.c \
+HPL_sum.c ;\
+           mv *.o ../../O )
+
+panel :
+	( cd $(HPLHOME)/src/panel/ ; \
+           echo " >>>  Compiling in src/panel directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_pspanel_disp.c \
+HPL_pspanel_free.c \
+HPL_pspanel_init.c \
+HPL_pspanel_new.c ; \
+           mv *.o ../../O )
+
+pauxil :
+	( cd $(HPLHOME)/src/pauxil/ ; \
+           echo " >>>  Compiling in src/pauxil directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_indxg2l.c \
+HPL_indxg2lp.c \
+HPL_indxg2p.c \
+HPL_indxl2g.c \
+HPL_infog2l.c \
+HPL_numroc.c \
+HPL_numrocI.c \
+HPL_pabort.c \
+HPL_pslamch.c \
+HPL_pslange.c \
+HPL_pslaprnt.c \
+HPL_pwarn.c \
+HPL_slaswp00N.c \
+HPL_slaswp01N.c \
+HPL_slaswp01T.c \
+HPL_slaswp02N.c \
+HPL_slaswp03N.c \
+HPL_slaswp03T.c \
+HPL_slaswp04N.c \
+HPL_slaswp04T.c \
+HPL_slaswp05N.c \
+HPL_slaswp05T.c \
+HPL_slaswp06N.c \
+HPL_slaswp06T.c \
+HPL_slaswp10N.c ; \
+           mv *.o ../../O )
+
+pfact :
+	( cd $(HPLHOME)/src/pfact/ ; \
+           echo " >>>  Compiling in src/pfact directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_psfact.c \
+HPL_psmxswp.c \
+HPL_pspancrN.c \
+HPL_pspancrT.c \
+HPL_pspanllN.c \
+HPL_pspanllT.c \
+HPL_pspanrlN.c \
+HPL_pspanrlT.c \
+HPL_psrpancrN.c \
+HPL_psrpancrT.c \
+HPL_psrpanllN.c \
+HPL_psrpanllT.c \
+HPL_psrpanrlN.c \
+HPL_psrpanrlT.c \
+HPL_slocmax.c \
+HPL_slocswpN.c \
+HPL_slocswpT.c ; \
+           mv *.o ../../O )
+
+pgesv :
+	( cd $(HPLHOME)/src/pgesv/ ; \
+           echo " >>>  Compiling in src/pgesv directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+HPL_logsort.c \
+HPL_perm.c \
+HPL_psgesv0.c \
+HPL_psgesv.c \
+HPL_psgesvK1.c \
+HPL_psgesvK2.c \
+HPL_psipid.c \
+HPL_pslaswp00N.c \
+HPL_pslaswp00T.c \
+HPL_pslaswp01N.c \
+HPL_pslaswp01T.c \
+HPL_pslindx0.c \
+HPL_pslindx10.c \
+HPL_pslindx1.c \
+HPL_pstrsv.c \
+HPL_psupdateNN.c \
+HPL_psupdateNT.c \
+HPL_psupdateTN.c \
+HPL_psupdateTT.c \
+HPL_sequil.c \
+HPL_srollN.c \
+HPL_srollT.c \
+HPL_sspreadN.c \
+HPL_sspreadT.c ; \
+           mv *.o ../../O )
+
+matgen :
+	( cd $(HPLHOME)/testing/matgen/ ; \
+           echo " >>>  Compiling in testing/matgen directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+HPL_jumpit.c \
+HPL_ladd.c \
+HPL_lmul.c \
+HPL_setran.c \
+HPL_smatgen.c \
+HPL_srand.c \
+HPL_xjumpm.c ; \
+           mv *.o ../../O )
+
+pmatgen :
+	( cd $(HPLHOME)/testing/pmatgen/ ; \
+           echo " >>>  Compiling in testing/pmatgen directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+HPL_psmatgen.c ; \
+           mv *.o ../../O )
+
+ptest :
+	( cd $(HPLHOME)/testing/ptest/ ; \
+           echo " >>>  Compiling in testing/ptest directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+HPL_psdriver.c \
+HPL_psinfo.c \
+HPL_pstest.c ; \
+           mv  HPL*.o   ../../O )
+
+ptimer :
+	( cd $(HPLHOME)/testing/ptimer/ ; \
+           echo " >>>  Compiling in testing/ptimer directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+HPL_ptimer.c \
+HPL_ptimer_cputime.c \
+HPL_ptimer_walltime.c ; \
+           mv *.o ../../O )
+
+timer :
+	( cd $(HPLHOME)/testing/timer/ ; \
+           echo " >>>  Compiling in testing/timer directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+HPL_timer.c \
+HPL_timer_cputime.c \
+HPL_timer_walltime.c ; \
+           mv *.o ../../O )
+

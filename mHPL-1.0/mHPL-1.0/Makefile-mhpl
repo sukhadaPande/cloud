@@ -1,0 +1,164 @@
+##################################################################
+include options
+##################################################################
+
+all   : build
+
+build : src testing original arbuild
+
+arbuild : src
+	( cd $(HPLHOME); \
+	mkdir $(HPLHOME)/bin/$(ARCH); \
+             mkdir lib; \
+             cd $(HPLHOME)/lib; \
+             mkdir $(ARCH);\
+             cd $(HPLHOME)/O ; \
+             echo "   >>>  creating library in " ; \
+             ar r libmhpl.a *.o ; \
+             ranlib libmhpl.a ; \
+	mv libmhpl.a $(HPLHOME)/lib/$(ARCH) ) 
+	echo " >>>  move library to"  $(HPLHOME)/lib/$(ARCH)
+
+src : cleanobj auxil blas comm grid panel pauxil pfact pgesv
+	echo " >>>  Finish compile in src directory " 
+
+testing : matgen pmatgen ptest timer ptimer
+	echo " >>>  Finish compile in testing " 
+
+cleanobj : 
+	touch $(HPLHOME)/O/test.o ; \
+	rm $(HPLHOME)/O/*.o ; \
+	
+	mv $(HPLHOME)/include/hpl_pgesv.h $(HPLHOME)/include/hpl_pgesv.h-temp ; \
+	mv $(HPLHOME)/include/hpl_psgesv.h $(HPLHOME)/include/hpl_psgesv.h-temp ; \
+	mv $(HPLHOME)/include/hpl_pzgesv.h $(HPLHOME)/include/hpl_pzgesv.h-temp ; \
+	mv $(HPLHOME)/include/hpl_pcgesv.h $(HPLHOME)/include/hpl_pcgesv.h-temp ; \
+
+	cp $(HPLHOME)/Example/files/*.h $(HPLHOME)/include ; \
+
+	cp $(HPLHOME)/Example/files/HPL_*blacsinit.c $(HPLHOME)/testing/ptest ; \
+
+	mv $(HPLHOME)/src/pfact/HPL_pdfact.c $(HPLHOME)/src/pfact/HPL_pdfact.c-temp ; \
+	mv $(HPLHOME)/src/pfact/HPL_psfact.c $(HPLHOME)/src/pfact/HPL_psfact.c-temp ; \
+	mv $(HPLHOME)/src/pfact/HPL_pzfact.c $(HPLHOME)/src/pfact/HPL_pzfact.c-temp ; \
+	mv $(HPLHOME)/src/pfact/HPL_pcfact.c $(HPLHOME)/src/pfact/HPL_pcfact.c-temp ; \
+
+	cp $(HPLHOME)/Example/files/HPL_p*fact.c $(HPLHOME)/src/pfact ;
+
+original :
+	mv $(HPLHOME)/include/hpl_pgesv.h-temp $(HPLHOME)/include/hpl_pgesv.h ; \
+	mv $(HPLHOME)/include/hpl_psgesv.h-temp $(HPLHOME)/include/hpl_psgesv.h ; \
+	mv $(HPLHOME)/include/hpl_pzgesv.h-temp $(HPLHOME)/include/hpl_pzgesv.h ; \
+	mv $(HPLHOME)/include/hpl_pcgesv.h-temp $(HPLHOME)/include/hpl_pcgesv.h ; \
+	mv $(HPLHOME)/src/pfact/HPL_pdfact.c-temp $(HPLHOME)/src/pfact/HPL_pdfact.c ; \
+	mv $(HPLHOME)/src/pfact/HPL_psfact.c-temp $(HPLHOME)/src/pfact/HPL_psfact.c ; \
+	mv $(HPLHOME)/src/pfact/HPL_pzfact.c-temp $(HPLHOME)/src/pfact/HPL_pzfact.c ; \
+	mv $(HPLHOME)/src/pfact/HPL_pcfact.c-temp $(HPLHOME)/src/pfact/HPL_pcfact.c ; \
+	rm -f $(HPLHOME)/testing/ptest/HPL_*blacsinit.c ;
+
+auxil :
+	( cd $(HPLHOME)/src/auxil/ ; \
+           echo " >>>  Compiling in src/auxil directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+	mv *.o ../../O ;)
+
+blas :
+	( cd $(HPLHOME)/src/blas/ ; \
+           echo " >>>  Compiling in src/blas directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+	mv *.o ../../O )
+
+comm :
+	( cd $(HPLHOME)/src/comm/ ; \
+           echo " >>>  Compiling in src/comm directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+	mv *.o ../../O )
+
+grid :
+	( cd $(HPLHOME)/src/grid/ ; \
+           echo " >>>  Compiling in src/grid directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+	mv *.o ../../O )
+
+panel :
+	( cd $(HPLHOME)/src/panel/ ; \
+           echo " >>>  Compiling in src/panel directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+           mv *.o ../../O )
+
+pauxil :
+	( cd $(HPLHOME)/src/pauxil/ ; \
+           echo " >>>  Compiling in src/pauxil directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+           mv *.o ../../O )
+
+pfact :
+	( cd $(HPLHOME)/src/pfact/ ; \
+           echo " >>>  Compiling in src/pfact directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+           mv *.o ../../O )
+
+pgesv :
+	( cd $(HPLHOME)/src/pgesv/ ; \
+           echo " >>>  Compiling in src/pgesv directory" ; \
+           $(CC) $(CCFLAGS) -c -I$(HPLHOME)/include \
+           *.c ; \
+           mv *.o ../../O )
+
+matgen :
+	( cd $(HPLHOME)/testing/matgen/ ; \
+           echo " >>>  Compiling in testing/matgen directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+           * ; \
+           mv *.o ../../O )
+
+pmatgen :
+	( cd $(HPLHOME)/testing/pmatgen/ ; \
+           echo " >>>  Compiling in testing/pmatgen directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+	*.c ; \
+           mv *.o ../../O )
+
+ptest :
+	( cd $(HPLHOME)/testing/ptest/ ; \
+           echo " >>>  Compiling in testing/ptest directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+	HPL_pdinfo.c \
+	HPL_pdtest.c \
+	HPL_dblacsinit.c \
+	HPL_psinfo.c \
+	HPL_pstest.c \
+	HPL_sblacsinit.c \
+	HPL_pzinfo.c \
+	HPL_pztest.c \
+	HPL_zblacsinit.c \
+	HPL_pcinfo.c \
+	HPL_pctest.c \
+	HPL_cblacsinit.c ; \
+           mv *.o  ../../O )
+
+ptimer :
+	( cd $(HPLHOME)/testing/ptimer/ ; \
+           echo " >>>  Compiling in testing/ptimer directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+	HPL_ptimer.c \
+           HPL_ptimer_cputime.c \
+           HPL_ptimer_walltime.c ; \
+           mv *.o ../../O )
+
+timer :
+	( cd $(HPLHOME)/testing/timer/ ; \
+           echo " >>>  Compiling in testing/timer directory" ; \
+           $(CC) $(CCFLAGS) $(DEBFLAGS) -c -I$(HPLHOME)/include \
+	HPL_timer.c \
+           HPL_timer_cputime.c \
+           HPL_timer_walltime.c  ; \
+           mv *.o ../../O )
+
