@@ -1,5 +1,5 @@
 ARCH    = ORION
-HPLHOME  = $(HOME)/mHPL-1.0
+HPLHOME  = /cloud/mHPL-1.0/mHPL-1.0
 MPICC = mpicc
 CC = $(MPICC)
 MPILOADER = mpif77
