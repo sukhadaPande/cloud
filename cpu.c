@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <immintrin.h>
 
 
 const int no_loops = 1000000;
@@ -52,32 +53,24 @@ void perform_FLOPS(int no_threads)
 
 void * fpoperations(void * arg)
 {
-        int no_threads = (int)(intptr_t)arg;
-        float a = 1.23;
-        float b = 1.23;
-        float c = 1.23;
-        float d = 1.23;
-        float e = 1.23;
-        float f = 1.23;
-        float g = 1.23;
-        float h = 1.23;
-        float i = 1.23;
-        float j = 1.23;
-        float k = 1.23;
-        int z;
-        float result;
-        long double no_of_operations=100000000000;
+		
+        __m256 evens = _mm256_set_ps(2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0,18.0,20.0);
+		__m256 odds = _mm256_set_ps(1.0, 3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0,17.0,19.0);
+		
+		long double no_of_operations=100000000000;
         int outerloop = (no_of_operations)/1000000;
-        printf("Outerloop %d\n",outerloop);
         int result1= (outerloop)/no_threads;
-        printf("value of result1 %d\n",result1);
-        int looprange=(no_of_operations/no_threads);
-        /* strong scaling in executing instructions*/
-        for (int z = 0; z < (1000000) ; z++)
+		_m256 result = _mm256_sub_ps(evens, odds);
+
+		for (int z = 0; z < (1000000) ; z++)
 		 {
                 for(int y =0; y <(result1);y++)
                 {
-                result=a+b+c+d+e+f+g+h+i+j+k;
+                float* f = (float*)&result;
+				printf("%f %f %f %f %f %f %f %f\n",f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7]);
                 }
         }
+		
+		
+		
 }
