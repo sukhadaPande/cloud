@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 
-const int no_loops = 10000;
+const int no_loops = 100000;
 void perform_FLOPS(int);
 void * fpoperations(void *);
 
