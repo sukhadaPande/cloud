@@ -26,6 +26,10 @@ int matC[MAX][MAX];
 
 int step_i = 0; 
 
+double randomNumberInRange(int n) {
+	return ((n/9.0) * (2.0)) - 1.0;
+}
+
 
 
 int main(int argc, char** argv)
@@ -34,8 +38,8 @@ int main(int argc, char** argv)
 		for (int i = 0; i < MAX; i++) { 
 			for (int j = 0; j < MAX; j++) 
 			{
-			matA[i][j] = rand() % 10; 
-			matB[i][j] = rand() % 10; 
+			matA[i][j] = randomNumberInRange(j); 
+			matB[i][j] = randomNumberInRange(j); 
 			} 
 		} 
         size_t threads_size=sizeof(no_threads)/sizeof(int);//size of thread
