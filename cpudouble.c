@@ -70,7 +70,7 @@ void * fpoperations(void * arg)
                 for(int y =0; y <(result1);y++)
                 {
 					
-				__m256 result = _mm256_sub_ps(evens, odds);
+				__m256 result = _mm256_sub_pd(evens, odds);
                 float* f = (float*)&result;
 				
                 }
