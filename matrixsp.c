@@ -15,7 +15,7 @@ void perform_FLOPS(int);
 void * fpoperations(void *);
 
 
-#define MAX 10000
+#define MAX 5000
 
 
 int matA[MAX][MAX]; 
@@ -55,7 +55,7 @@ void perform_FLOPS(int no_threads)
         struct timeval startTime, endTime;
         double total_time,no_flops;
         // no of iterations
-        long double no_operations= 1000000000000;       // no of iterations
+        long double no_operations= 250000000000;       // no of iterations
         pthread_t *threads = (pthread_t*) malloc(no_threads * sizeof (pthread_t));
         gettimeofday(&startTime, NULL);//getting current time
         int i;
