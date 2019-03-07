@@ -57,8 +57,9 @@ void perform_FLOPS(int no_threads)
 void * fpoperations(void * arg)
 {
 		int no_threads = (int)(intptr_t)arg;
-		__m256 evens = _mm256_set_pd(2.0, 4.0, 6.0, 8.0);
-		__m256 odds = _mm256_set_pd(1.0, 3.0, 5.0, 7.0);
+		__m256d evensd = _mm256_set_pd(2.0, 4.0, 6.0, 8.0);
+		__m256d oddsd = _mm256_set_pd(1.0, 3.0, 5.0, 7.0);
+		__m256d resultd;
 		
 		long double no_of_operations=1000000000000/8;
         int outerloop = (no_of_operations)/1000000;
@@ -70,8 +71,8 @@ void * fpoperations(void * arg)
                 for(int y =0; y <(result1);y++)
                 {
 					
-				__m256 result = _mm256_sub_pd(evens, odds);
-                float* f = (float*)&result;
+				resultd = _mm256_add_pd(evensd, oddsd);
+                float* f = (float*)&resultd;
 				
                 }
         }
