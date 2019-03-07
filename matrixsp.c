@@ -16,7 +16,7 @@ void perform_FLOPS(int);
 void * fpoperations(void *);
 
 
-#define MAX 100000 
+#define MAX 100
 
 
 int matA[MAX][MAX]; 
