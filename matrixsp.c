@@ -11,12 +11,11 @@
 #include <stdio.h>
 
 
-const int no_loops = 1000000;
 void perform_FLOPS(int);
 void * fpoperations(void *);
 
 
-#define MAX 1000
+#define MAX 10000
 
 
 int matA[MAX][MAX]; 
@@ -37,8 +36,8 @@ int main(int argc, char** argv)
 		for (int i = 0; i < MAX; i++) { 
 			for (int j = 0; j < MAX; j++) 
 			{
-			matA[i][j] = randomNumberInRange(j); 
-			matB[i][j] = randomNumberInRange(j); 
+			matA[i][j] = randomNumberInRange(rand() % 10); 
+			matB[i][j] = randomNumberInRange(rand() % 10);  
 			} 
 		} 
         size_t threads_size=sizeof(no_threads)/sizeof(int);//size of thread
@@ -82,7 +81,7 @@ void * fpoperations(void * arg)
 		int no_threads = (int)(intptr_t)arg;
 		int core = step_i++; 
  
-	for (int i = MAX / no_threads; i < MAX / no_threads; i++) 
+	for (int i = core * MAX / no_threads; i < (core + 1) * MAX / no_threads; i++) 
 		for (int j = 0; j < MAX; j++) 
 			for (int k = 0; k < MAX; k++) 
 				matC[i][j] += matA[i][k] * matB[k][j]; 
