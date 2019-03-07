@@ -82,7 +82,7 @@ void * fpoperations(void * arg)
 		int no_threads = (int)(intptr_t)arg;
 		int core = step_i++; 
  
-	for (int i = core * MAX / no_threads; i < (core + 1) * MAX / no_threads; i++) 
+	for (int i = MAX / no_threads; i < MAX / no_threads; i++) 
 		for (int j = 0; j < MAX; j++) 
 			for (int k = 0; k < MAX; k++) 
 				matC[i][j] += matA[i][k] * matB[k][j]; 
