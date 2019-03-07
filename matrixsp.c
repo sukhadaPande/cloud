@@ -15,9 +15,29 @@ const int no_loops = 1000000;
 void perform_FLOPS(int);
 void * fpoperations(void *);
 
+
+#define MAX 4 
+
+#define MAX_THREAD 4
+
+int matA[MAX][MAX]; 
+int matB[MAX][MAX]; 
+int matC[MAX][MAX]; 
+
+int step_i = 0; 
+
+
+
 int main(int argc, char** argv)
 {
         int no_threads[4] = {1,2,4,8},i;//no of threads array
+		for (int i = 0; i < MAX; i++) { 
+			for (int j = 0; j < MAX; j++) 
+			{
+			matA[i][j] = rand() % 10; 
+			matB[i][j] = rand() % 10; 
+			} 
+		} 
         size_t threads_size=sizeof(no_threads)/sizeof(int);//size of thread
         printf("no of threads\t\t\tNo of Operations\t\tOperation\t\t\tIOPS/FLOPS\t\tTime(Seconds)\n\n");
         for(i=0;i<threads_size;i++)
@@ -57,25 +77,11 @@ void perform_FLOPS(int no_threads)
 void * fpoperations(void * arg)
 {
 		int no_threads = (int)(intptr_t)arg;
-		__m256 evens = _mm256_set_ps(2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0);
-		__m256 odds = _mm256_set_ps(1.0, 3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0);
-		
-		long double no_of_operations=1000000000000/8;
-        int outerloop = (no_of_operations)/1000000;
-        int result1= (outerloop)/no_threads;
-		
-
-		for (int z = 0; z < (1000000) ; z++)
-		 {
-                for(int y =0; y <(result1);y++)
-                {
-					
-				__m256 result = _mm256_sub_ps(evens, odds);
-                float* f = (float*)&result;
-				
-                }
-        }
-		
-		
+		int core = step_i++; 
+ 
+	for (int i = core * MAX / no_threads; i < (core + 1) * MAX / no_threads; i++) 
+		for (int j = 0; j < MAX; j++) 
+			for (int k = 0; k < MAX; k++) 
+				matC[i][j] += matA[i][k] * matB[k][j]; 
 		
 }
